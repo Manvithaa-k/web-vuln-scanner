@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Application Vulnerability Scanner</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        input[type="text"] { width: 300px; padding: 8px; }
+        button { padding: 8px 12px; }
+        .flash { margin-bottom: 1em; padding: 10px; border-radius: 4px; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .success { background-color: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>Web Application Vulnerability Scanner</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('scan') }}" method="post">
+        <label for="url">Enter URL to scan:</label><br />
+        <input type="text" name="url" id="url" placeholder="http://example.com" required />
+        <button type="submit">Start Scan</button>
+    </form>
+</body>
+</html>
