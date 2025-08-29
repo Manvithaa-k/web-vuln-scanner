@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Your Lookup History</h3>
+<div class="card p-3">
+  {% if records %}
+  <table class="table table-sm">
+    <thead><tr><th>IP</th><th>Time</th><th>Summary</th></tr></thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td>{{ r.ip }}</td>
+        <td>{{ r.ts.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>VT: {{ 'yes' if r.vt else 'no' }} • Abuse: {{ 'yes' if r.abuse else 'no' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No history yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

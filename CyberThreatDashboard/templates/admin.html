@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-3">
+  <h3 class="me-auto">Admin</h3>
+  <form method="post" action="{{ url_for('email_report') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-outline-info btn-sm">Email PDF Report</button>
+  </form>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card bg-black border-secondary h-100">
+      <div class="card-body">
+        <h5 class="mb-3">Users</h5>
+        <div class="table-responsive">
+          <table class="table table-dark align-middle">
+            <thead class="table-secondary text-dark">
+              <tr><th>User</th><th>Role</th><th>2FA</th><th>Lock</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.role }}</td>
+                <td>
+                  {% if u.otp_secret %}
+                    <span class="badge bg-success">Enabled</span>
+                  {% else %}
+                    <span class="badge bg-secondary">Disabled</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if u.is_locked() %}
+                    <span class="badge bg-warning text-dark">Locked</span>
+                  {% else %}
+                    <span class="badge bg-success">OK</span>
+                  {% endif %}
+                </td>
+                <td class="d-flex gap-2">
+                  {% if u.otp_secret %}
+                    <a class="btn btn-sm btn-outline-light" target="_blank" href="{{ url_for('qrcode_png', user_id=u.id) }}">QR</a>
+                  {% else %}
+                    <form method="post" action="{{ url_for('enable_2fa', user_id=u.id) }}">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      <button class="btn btn-sm btn-outline-primary">Enable 2FA</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="small text-secondary">Scan QR in Google Authenticator / Authy after enabling 2FA.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card bg-black border-secondary h-100">
+      <div class="card-body">
+        <h5 class="mb-3">All Incidents</h5>
+        <div class="table-responsive" style="max-height: 420px; overflow:auto;">
+          <table class="table table-dark table-sm align-middle">
+            <thead class="table-secondary text-dark">
+              <tr><th>Time</th><th>IOC</th><th>Type</th><th>Sev</th><th>Score</th><th>Rep</th><th>CTRY</th></tr>
+            </thead>
+            <tbody>
+              {% for i in incidents %}
+              <tr>
+                <td>{{ i.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ i.ioc }}</td>
+                <td>{{ i.ioc_type }}</td>
+                <td>{{ i.severity }}</td>
+                <td>{{ i.score }}</td>
+                <td>{{ i.reports }}</td>
+                <td>{{ i.country }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-3">
+          <a class="btn btn-outline-light btn-sm" href="{{ url_for('report_pdf') }}">Download PDF</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

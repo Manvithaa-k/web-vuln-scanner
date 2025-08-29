@@ -1,0 +1,10 @@
+{
+  "admin": {
+    "pw": "scrypt:32768:8:1$4fRTgEmK71YGUCQP$143c055786aa53abdb08183fb186e001808739829c7fe6974c62b1170c599dc63c79b12603453607941b4137a78a299eccee55159a670c56527b951ea57235f6",
+    "role": "admin"
+  },
+  "MANVITHA": {
+    "pw": "scrypt:32768:8:1$aZnwM0uZl71UQYT7$528e8a4eceb0b168420b3334295f04cb08503a41f954d3bebc253483e163cd3af7c10178f865c73f60b0b71166bbab77fc61b7fa81c94ca0ac4c0229d62e427c",
+    "role": "user"
+  }
+}

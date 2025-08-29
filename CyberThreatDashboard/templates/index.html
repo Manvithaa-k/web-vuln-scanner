@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Active Threats</h2>
+<table class="w-full text-left border-collapse">
+    <thead>
+        <tr class="bg-gray-700">
+            <th class="p-2">IOC</th>
+            <th class="p-2">Type</th>
+            <th class="p-2">Severity</th>
+            <th class="p-2">Country</th>
+            <th class="p-2">Score</th>
+        </tr>
+    </thead>
+    <tbody id="threatTable">
+        {% for inc in incidents %}
+        <tr class="bg-gray-800 hover:bg-gray-700">
+            <td class="p-2">{{ inc.ioc }}</td>
+            <td class="p-2">{{ inc.ioc_type }}</td>
+            <td class="p-2 text-red-400">{{ inc.severity }}</td>
+            <td class="p-2">{{ inc.country }}</td>
+            <td class="p-2">{{ inc.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    const socket = io();
+    socket.on('new_threats', (data) => {
+        data.feed.forEach(item => {
+            const row = `<tr class="bg-green-800 animate-pulse">
+                            <td class="p-2">${item.ioc}</td>
+                            <td class="p-2">IP</td>
+                            <td class="p-2 text-red-400">${item.severity}</td>
+                            <td class="p-2">Unknown</td>
+                            <td class="p-2">90</td>
+                        </tr>`;
+            document.getElementById('threatTable').insertAdjacentHTML('afterbegin', row);
+            setTimeout(() => {
+                document.querySelector('tr.animate-pulse').classList.remove('animate-pulse');
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

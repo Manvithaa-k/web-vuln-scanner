@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-3">
+  <h4>Enable Two-Factor Authentication (2FA)</h4>
+  <p>Scan this QR URL in your authenticator app or use secret: <code>{{ secret }}</code></p>
+  <p><small>Provisioning URI (for QR):</small></p>
+  <pre>{{ otpauth }}</pre>
+  <form method="POST">
+    <input name="token" class="form-control mb-2" placeholder="Enter code from authenticator" required>
+    <button class="btn btn-primary">Enable 2FA</button>
+  </form>
+</div>
+{% endblock %}

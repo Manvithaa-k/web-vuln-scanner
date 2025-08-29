@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Cyber Threat Report</title>
+    <style>
+        body { background: #000; color: #fff; font-family: Arial, sans-serif; }
+        h2 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #555; padding: 8px; text-align: left; }
+        th { background-color: #222; }
+        tr:nth-child(even) { background-color: #111; }
+        ol { padding-left: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Cyber Threat Intelligence Report</h2>
+    
+    <h3>Recent Incidents</h3>
+    <table>
+        <thead>
+            <tr><th>IP</th><th>Country</th><th>Abuse Score</th><th>Type</th><th>Severity</th><th>Last Seen</th></tr>
+        </thead>
+        <tbody>
+            {% for inc in incidents %}
+            <tr>
+                <td>{{ inc.ioc }}</td>
+                <td>{{ inc.country }}</td>
+                <td>{{ inc.abuseScore }}</td>
+                <td>{{ inc.type }}</td>
+                <td>{{ inc.severity }}</td>
+                <td>{{ inc.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h3>Top Recommended Actions</h3>
+    <ol>
+        {% for a in top_actions %}
+        <li>{{ a }}</li>
+        {% endfor %}
+    </ol>
+    
+    <h3>Summary</h3>
+    <ul>
+        <li>High Severity: {{ counts.High or 0 }}</li>
+        <li>Medium Severity: {{ counts.Medium or 0 }}</li>
+        <li>Low Severity: {{ counts.Low or 0 }}</li>
+    </ul>
+</body>
+</html>

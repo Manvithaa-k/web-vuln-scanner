@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>IP Lookup</h3>
+<form method="POST" class="mb-3 d-flex gap-2">
+  <input name="ip" class="form-control" placeholder="e.g., 8.8.8.8" required>
+  <button class="btn btn-primary">Lookup</button>
+</form>
+
+{% if result %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header">VirusTotal</div>
+      <div class="card-body">
+        {% if result.vt.get('error') %}
+          <pre>{{ result.vt.error }}</pre>
+        {% else %}
+          <p><b>IP:</b> {{ result.ip }}</p>
+          <p><b>ASN:</b> {{ result.vt.data.attributes.asn }}</p>
+          <p><b>Org:</b> {{ result.vt.data.attributes.as_owner }}</p>
+          <p><b>Country:</b> {{ result.vt.data.attributes.country }}</p>
+          <p><b>Reputation:</b> {{ result.vt.data.attributes.reputation }}</p>
+          <p><b>Last analysis:</b> {{ result.vt.data.attributes.last_analysis_stats.harmless }} harmless, {{ result.vt.data.attributes.last_analysis_stats.malicious }} malicious</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header">AbuseIPDB</div>
+      <div class="card-body">
+        {% if result.abuse.get('error') %}
+          <pre>{{ result.abuse.error }}</pre>
+        {% else %}
+          <p><b>IP:</b> {{ result.abuse.ipAddress }}</p>
+          <p><b>ISP:</b> {{ result.abuse.isp }}</p>
+          <p><b>Country:</b> {{ result.abuse.countryCode }}</p>
+          <p><b>Confidence:</b> {{ result.abuse.abuseConfidenceScore }}</p>
+          <p><b>Total Reports:</b> {{ result.abuse.totalReports }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
